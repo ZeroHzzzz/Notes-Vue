@@ -1,0 +1,144 @@
+:root {
+  /* 通用颜色 */
+  --text-color: #2c3e50;
+  --bg-color: #f5f5f5;
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  --border-color: #e0e0e0;
+  --accent-color: #42b983;
+  --accent-hover: #3aa876;
+  
+  /* 导航栏 */
+  --nav-bg: #ffffff;
+  --nav-shadow: rgba(0, 0, 0, 0.1);
+  --nav-text: #2c3e50;
+  --nav-hover: #f0f0f0;
+  
+  /* 按钮和交互 */
+  --btn-bg: #f8f9fa;
+  --btn-hover: #e9ecef;
+  --btn-color: #495057;
+  --btn-active-bg: #e7f5ff;
+  --btn-active-border: #339af0;
+  --btn-active-color: #1971c2;
+  --save-btn-bg: #42b983;
+  --save-btn-hover: #3aa876;
+  --cancel-btn-color: #666;
+  --cancel-btn-hover: #333;
+  --input-bg: #ffffff;
+  --input-color: #2c3e50;
+  --input-placeholder: #999;
+  
+  /* 删除和警告 */
+  --delete-color: #ff4757;
+  --delete-bg: rgba(255, 71, 87, 0.1);
+  
+  /* 拖拽效果 */
+  --drag-shadow: rgba(79, 172, 254, 0.6);
+  --drag-border: rgba(79, 172, 254, 0.8);
+  --ghost-bg: rgba(79, 172, 254, 0.15);
+  --ghost-border: rgba(79, 172, 254, 0.4);
+}
+
+:root.dark {
+  /* 通用颜色 */
+  --text-color: #e0e0e0;
+  --bg-color: #1a1a1a;
+  --card-bg: #2c2c2c;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --border-color: #404040;
+  --accent-color: #42d392;
+  --accent-hover: #3bc785;
+  
+  /* 导航栏 */
+  --nav-bg: #2c2c2c;
+  --nav-shadow: rgba(0, 0, 0, 0.3);
+  --nav-text: #e0e0e0;
+  --nav-hover: #3c3c3c;
+  
+  /* 按钮和交互 */
+  --btn-bg: #3c3c3c;
+  --btn-hover: #4a4a4a;
+  --btn-color: #e0e0e0;
+  --btn-active-bg: #1a4332;
+  --btn-active-border: #42d392;
+  --btn-active-color: #42d392;
+  --save-btn-bg: #42d392;
+  --save-btn-hover: #3bc785;
+  --cancel-btn-color: #b0b0b0;
+  --cancel-btn-hover: #e0e0e0;
+  --input-bg: #2c2c2c;
+  --input-color: #e0e0e0;
+  --input-placeholder: #666;
+  
+  /* 删除和警告 */
+  --delete-color: #ff6b6b;
+  --delete-bg: rgba(255, 107, 107, 0.1);
+  
+  /* 拖拽效果 */
+  --drag-shadow: rgba(66, 211, 146, 0.6);
+  --drag-border: rgba(66, 211, 146, 0.8);
+  --ghost-bg: rgba(66, 211, 146, 0.15);
+  --ghost-border: rgba(66, 211, 146, 0.4);
+}
+
+/* 全局样式 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Container styles */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem;
+  }
+
+  .notes-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .feature-card {
+    margin: 1rem 0;
+  }
+
+  .contact-content {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .notes-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .notes-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}

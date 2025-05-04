@@ -1,0 +1,33 @@
+:root {
+  /* 浅色模式（默认） */
+  --bg-color: #f8f9fa;
+  --card-bg: #ffffff;
+  --text-primary: #2c3e50;
+  --text-secondary: #6c757d;
+  --accent-color: #42b983;
+  --border-color: #e9ecef;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --nav-shadow: rgba(0, 0, 0, 0.05);
+  --hover-bg: rgba(66, 185, 131, 0.1);
+  --input-bg: #ffffff;
+  --input-color: #2c3e50;
+  --input-placeholder: #a8aeb3;
+}
+
+/* 深色模式 */
+.dark {
+  --bg-color: #1a1a1a;
+  --card-bg: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-color: #42b983;
+  --border-color: #3d3d3d;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --nav-bg: rgba(45, 45, 45, 0.8);
+  --nav-shadow: rgba(0, 0, 0, 0.2);
+  --hover-bg: rgba(66, 185, 131, 0.2);
+  --input-bg: #3d3d3d;
+  --input-color: #ffffff;
+  --input-placeholder: #808080;
+}
