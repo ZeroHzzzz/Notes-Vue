@@ -35,7 +35,18 @@
     </div>
     
     <div class="notes-main">
-      <h2>我的笔记</h2>
+      <div class="notes-header">
+        <h2>我的笔记</h2>
+        <div class="search-box">
+          <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="搜索笔记..."
+            class="search-input"
+          >
+          <i class="fas fa-search search-icon"></i>
+        </div>
+      </div>
       <div class="notes-container">
         <div class="notes-grid">
           <draggable
@@ -169,10 +180,30 @@ const getNoteCountByCategory = (categoryId: number) => {
   return notes.value.filter(note => note.categoryId === categoryId).length
 }
 
+const searchQuery = ref('')
+
 const filteredNotes = computed(() => {
-  if (!currentCategory.value || currentCategory.value === 0) return notes.value
-  if (currentCategory.value === -1) return notes.value.filter(note => !note.categoryId)
-  return notes.value.filter(note => note.categoryId === currentCategory.value)
+  let filtered = notes.value
+  
+  // 按分类筛选
+  if (currentCategory.value && currentCategory.value !== 0) {
+    if (currentCategory.value === -1) {
+      filtered = filtered.filter(note => !note.categoryId)
+    } else {
+      filtered = filtered.filter(note => note.categoryId === currentCategory.value)
+    }
+  }
+  
+  // 按搜索关键词筛选
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(note =>
+      note.title.toLowerCase().includes(query) ||
+      note.preview.toLowerCase().includes(query)
+    )
+  }
+  
+  return filtered
 })
 
 const onDragStart = (e: any) => {
@@ -400,6 +431,56 @@ const deleteNote = (id: number) => {
 
 .notes-main {
   flex: 1;
+}
+
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.search-box {
+  position: relative;
+  width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--input-bg);
+  color: var(--input-color);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-shadow);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .notes-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+  }
 }
 
 @media (max-width: 768px) {

@@ -1,5 +1,49 @@
-# Vue 3 + TypeScript + Vite
+# Notes - 在线笔记系统
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一个现代化的在线笔记系统（其实就是为了水水web前端课设），提供直观的用户界面和丰富的功能。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 功能特点
+
+- 📝 笔记管理：创建、编辑、删除和组织笔记
+- 🎨 主题定制：支持多种主题色，满足个性化需求
+- 📊 数据统计：直观展示笔记数据和使用情况
+- 👤 个人中心：管理个人信息和系统设置
+- 🔍 搜索功能：快速查找所需笔记
+- 📱 响应式设计：完美适配各种设备(也许吧，没有测试过)
+
+## 技术栈
+
+- 前端框架：Vue 3
+- 路由管理：Vue Router
+- 类型支持：TypeScript
+- 构建工具：Vite
+- UI 组件：自定义组件
+- 样式方案：CSS 变量 + 主题定制
+
+## 开发环境
+
+```bash
+# 安装依赖
+npm install
+
+# 启动
+npm run dev
+```
+
+## 项目结构
+
+```
+src/
+  ├── assets/      # 静态资源
+  ├── components/  # 公共组件
+  ├── router/      # 路由配置
+  ├── styles/      # 全局样式
+  ├── views/       # 页面组件
+  └── App.vue      # 根组件
+```
+
+## 贡献
+
+不欢迎提交 Issue 和 Pull Request 来帮助改进项目。
+
+
