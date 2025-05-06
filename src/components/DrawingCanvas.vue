@@ -120,9 +120,10 @@
       @mousemove="draw"
       @mouseup="stopDrawing"
       @mouseleave="stopDrawing"
-      @touchstart="handleTouchStart"
-      @touchmove="handleTouchMove"
-      @touchend="stopDrawing"
+      @touchstart.passive="handleTouchStart"
+      @touchmove.passive="handleTouchMove"
+      @touchend.passive="stopDrawing"
+      @wheel.passive
     ></canvas>
   </div>
 </template>
@@ -344,7 +345,6 @@ const draw = (e: MouseEvent) => {
 }
 
 const handleTouchStart = (e: TouchEvent) => {
-  e.preventDefault()
   if (!canvas.value || !ctx) return
 
   const rect = canvas.value.getBoundingClientRect()
@@ -365,7 +365,6 @@ const handleTouchStart = (e: TouchEvent) => {
 }
 
 const handleTouchMove = (e: TouchEvent) => {
-  e.preventDefault()
   if (!isDrawing.value || !ctx || !canvas.value) return
 
   const rect = canvas.value.getBoundingClientRect()

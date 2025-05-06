@@ -177,69 +177,140 @@ const handleSubmit = () => {
 }
 
 .contact-form h2 {
-  margin-bottom: 2rem;
+  margin: 0 0 2rem;
   color: var(--text-primary);
+  font-size: 1.5rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.contact-form h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-group label::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: var(--accent-color);
+  border-radius: 50%;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.75rem;
   background: var(--bg-color);
   color: var(--text-primary);
   font-size: 1rem;
   transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-group input:hover,
+.form-group textarea:hover {
+  border-color: var(--accent-color);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px var(--accent-shadow);
+  box-shadow: 0 0 0 3px var(--accent-shadow);
+  background: var(--card-bg);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
 }
 
 .form-group input.error {
   border-color: #ff4d4f;
+  background: rgba(255, 77, 79, 0.05);
 }
 
 .form-group input.error:focus {
-  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.2);
 }
 
 .error-message {
   color: #ff4d4f;
   font-size: 0.875rem;
-  margin-top: 0.25rem;
-  display: block;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-message::before {
+  content: '⚠';
+  font-size: 1rem;
 }
 
 .submit-btn {
   width: 100%;
   padding: 1rem;
   border: none;
-  border-radius: 0.5rem;
-  background: var(--accent-color);
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-color-dark));
   color: white;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.5s ease;
 }
 
 .submit-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--accent-shadow);
+}
+
+.submit-btn:hover::before {
+  left: 100%;
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px var(--accent-shadow);
 }
 
 /* 联系信息样式 */
@@ -248,60 +319,101 @@ const handleSubmit = () => {
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 4px 12px var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .contact-info h2 {
-  margin-bottom: 2rem;
+  margin: 0;
   color: var(--text-primary);
+  font-size: 1.5rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.contact-info h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
 }
 
 .info-item {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--bg-color);
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--card-shadow);
 }
 
 .info-item i {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   color: var(--accent-color);
-  margin-top: 0.25rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--card-shadow);
 }
 
 .info-item h3 {
   margin: 0;
   font-size: 1.1rem;
   color: var(--text-primary);
+  font-weight: 600;
 }
 
 .info-item p {
   margin: 0.25rem 0 0;
   color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .social-links {
-  margin-top: 2rem;
   display: flex;
   gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-color);
+  border-radius: 0.75rem;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .social-links a {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--bg-color);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--card-bg);
   color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px var(--card-shadow);
 }
 
 .social-links a:hover {
   background: var(--accent-color);
   color: white;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--accent-shadow);
 }
 
 /* 地图区域样式 */
@@ -313,16 +425,38 @@ const handleSubmit = () => {
 }
 
 .map-container h2 {
-  margin-bottom: 2rem;
+  margin: 0 0 2rem;
   color: var(--text-primary);
+  font-size: 1.5rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.map-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 3px;
 }
 
 .map-placeholder {
   width: 100%;
   height: 400px;
   background: var(--bg-color);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 8px var(--card-shadow);
+}
+
+.map-placeholder:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 2px 12px var(--card-shadow);
 }
 
 .map-placeholder-text {
@@ -333,30 +467,80 @@ const handleSubmit = () => {
   align-items: center;
   justify-content: center;
   color: var(--text-secondary);
+  background: linear-gradient(45deg, var(--bg-color), var(--card-bg));
 }
 
 .map-placeholder-text i {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-color);
+  opacity: 0.8;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 .map-placeholder-text p {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   margin: 0;
+  font-weight: 500;
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .contact-container {
     grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact {
+    padding: 1.5rem;
   }
 
   .contact h1 {
     font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact {
+    padding: 1rem;
+  }
+
+  .contact-form,
+  .contact-info,
+  .map-container {
+    padding: 1.5rem;
   }
 
   .map-placeholder {
     height: 300px;
+  }
+
+  .info-item {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .info-item i {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .social-links {
+    padding: 1rem;
+  }
+
+  .social-links a {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
   }
 }
 </style>

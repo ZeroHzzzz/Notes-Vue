@@ -41,6 +41,45 @@
         <div class="line-chart" ref="activityChart"></div>
       </div>
     </div>
+
+    <!-- 成就系统表格 -->
+    <div class="achievements-card">
+      <h3>我的成就</h3>
+      <div class="table-container">
+        <table class="achievements-table">
+          <thead>
+            <tr>
+              <th>成就</th>
+              <th>描述</th>
+              <th>进度</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="achievement in achievements" :key="achievement.id">
+              <td class="achievement-name">
+                <span class="achievement-icon" :class="{ 'unlocked': achievement.unlocked }">
+                  {{ achievement.icon }}
+                </span>
+                {{ achievement.name }}
+              </td>
+              <td>{{ achievement.description }}</td>
+              <td class="progress-cell">
+                <div class="progress-bar">
+                  <div class="progress-fill" :style="{ width: achievement.progress + '%' }"></div>
+                </div>
+                <span class="progress-text">{{ achievement.progress }}%</span>
+              </td>
+              <td>
+                <span class="status-badge" :class="{ 'unlocked': achievement.unlocked }">
+                  {{ achievement.unlocked ? '已解锁' : '未解锁' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -76,6 +115,42 @@ const notesThisMonth = computed(() => {
   }).length
 })
 const streak = ref(5) // 模拟数据
+
+// 成就系统数据
+const achievements = ref([
+  {
+    id: 1,
+    name: '初来乍到',
+    description: '创建第一篇笔记',
+    progress: 100,
+    unlocked: true,
+    icon: '📝'
+  },
+  {
+    id: 2,
+    name: '勤奋学者',
+    description: '连续记录7天',
+    progress: Math.min(Math.round((streak.value / 7) * 100), 100),
+    unlocked: streak.value >= 7,
+    icon: '🔥'
+  },
+  {
+    id: 3,
+    name: '分类达人',
+    description: '使用所有笔记分类',
+    progress: 60,
+    unlocked: false,
+    icon: '📁'
+  },
+  {
+    id: 4,
+    name: '笔记专家',
+    description: '创建10篇笔记',
+    progress: Math.min(Math.round((notes.value.length / 10) * 100), 100),
+    unlocked: notes.value.length >= 10,
+    icon: '🌟'
+  }
+])
 
 // 图表相关
 const categoryChart = ref<HTMLElement | null>(null)
@@ -244,6 +319,117 @@ onMounted(() => {
 
   .chart-card {
     padding: 1rem;
+  }
+}
+.achievements-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 4px 20px var(--card-shadow);
+}
+
+.achievements-card h3 {
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.achievements-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.achievements-table th,
+.achievements-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.achievements-table th {
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-color);
+}
+
+.achievements-table tr:hover {
+  background: var(--bg-color);
+}
+
+.achievement-name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.achievement-icon {
+  font-size: 1.25rem;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.achievement-icon.unlocked {
+  opacity: 1;
+}
+
+.progress-cell {
+  width: 200px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-right: 0.5rem;
+  flex-grow: 1;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-color);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.status-badge.unlocked {
+  background: var(--accent-color);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .achievements-card {
+    padding: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .achievements-table th,
+  .achievements-table td {
+    padding: 0.75rem;
+  }
+
+  .progress-cell {
+    width: 150px;
   }
 }
 </style>

@@ -10,7 +10,26 @@
                :key="index"
                class="carousel-slide"
                :class="{ active: currentSlide === index }">
-            <img :src="slide.image" :alt="slide.title">
+            <template v-if="slide.type === 'video'">
+              <div class="video-container" 
+                @click="toggleVideoFullscreen(index)"
+                @mouseenter="playVideo(index)"
+                @mouseleave="pauseVideo(index)">
+                <video
+                  :ref="el => { if (el) videoRefs[index] = el }"
+                  :src="slide.source"
+                  class="slide-video"
+                  :class="{ 'fullscreen': isVideoFullscreen }"
+                  :poster="slide.image"
+                  loop
+                  muted
+                  playsinline
+                ></video>
+              </div>
+            </template>
+            <template v-else>
+              <img :src="slide.image" :alt="slide.title">
+            </template>
             <div class="slide-info">
               <h3>{{ slide.title }}</h3>
               <p>{{ slide.description }}</p>
@@ -113,6 +132,42 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
+const videoRefs = ref<{ [key: number]: HTMLVideoElement }>({});
+const isVideoFullscreen = ref(false);
+
+const playVideo = (index: number) => {
+  const video = videoRefs.value[index];
+  if (video) {
+    video.play();
+  }
+};
+
+const pauseVideo = (index: number) => {
+  const video = videoRefs.value[index];
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+    video.load(); // 重新加载视频，这会显示封面图片
+  }
+};
+
+const toggleVideoFullscreen = (index: number) => {
+  const video = videoRefs.value[index];
+  if (!video) return;
+  
+  if (!isVideoFullscreen.value) {
+    if (video.requestFullscreen) {
+      video.requestFullscreen();
+    }
+    isVideoFullscreen.value = true;
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+    isVideoFullscreen.value = false;
+  }
+};
+
 // 用户信息
 const username = ref('ZeroHzzzz');
 const lastVisit = ref('2025-01-24 15:30');
@@ -145,16 +200,20 @@ const carouselSlides = ref([
   {
     title: '算法训练营',
     description: '系统提升算法能力，从入门到精通',
-    image: '/src/assets/slide1.png'
+    type: 'video',
+    source: '/src/assets/1616862789-1-192.mp4',
+    image: '/src/assets/slide1.jpg'
   },
   {
     title: '竞赛备战营',
     description: '针对性训练，助你在比赛中脱颖而出',
+    type: 'image',
     image: '/src/assets/slide2.jpg'
   },
   {
     title: '大厂面试题',
     description: '精选大厂算法面试题，助你一臂之力',
+    type: 'image',
     image: '/src/assets/slide3.jpg'
   }
 ]);
@@ -283,11 +342,39 @@ onMounted(() => {
   opacity: 1;
 }
 
-.carousel-slide img {
+.carousel-slide img,
+.carousel-slide video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.slide-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.slide-video.fullscreen {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: black;
 }
 
 .slide-info {
@@ -319,17 +406,18 @@ onMounted(() => {
   height: 40px;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  z-index: 10;
 }
 
 .carousel-btn:hover {
-  background: white;
+  background: rgba(0, 0, 0, 0.8);
   transform: translateY(-50%) scale(1.1);
 }
 

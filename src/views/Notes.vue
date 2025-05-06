@@ -50,9 +50,8 @@
       <div class="notes-container">
         <div class="notes-grid">
           <draggable
-            v-model="filteredNotes"
+            v-model="paginatedNotes"
             class="notes-list"
-            :list="filteredNotes"
             :animation="200"
             drag-class="ghost-note"
             @start="onDragStart"
@@ -79,11 +78,41 @@
           </draggable>
           <router-link to="/note/new" class="add-note-card">
             <div class="add-note-content">
-              <div class="plus-icon">+</div>
-              <span>新建笔记</span>
+              <div class="plus-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="96" height="96">
+                  <path fill="none" d="M0 0h24v24H0z"/>
+                  <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2h6z" fill="currentColor"/>
+                </svg>
+              </div>
             </div>
           </router-link>
         </div>
+      </div>
+      <!-- 分页导航 -->
+      <div class="pagination">
+        <button 
+          class="page-btn" 
+          :disabled="currentPage === 1"
+          @click="changePage(currentPage - 1)"
+        >
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button 
+          v-for="page in totalPages" 
+          :key="page"
+          class="page-btn"
+          :class="{ active: currentPage === page }"
+          @click="changePage(page)"
+        >
+          {{ page }}
+        </button>
+        <button 
+          class="page-btn" 
+          :disabled="currentPage === totalPages"
+          @click="changePage(currentPage + 1)"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
       <div 
         class="trash-zone" 
@@ -136,23 +165,93 @@ const showAddCategory = ref(false)
 const newCategoryName = ref('')
 
 const notes = ref<Note[]>([
+  // 第一页
   {
     id: 1,
     title: '我的第一篇笔记',
     preview: '这是一个示例笔记内容...',
-    date: '2025-01-20'
+    date: '2025-01-20',
+    categoryId: 1
   },
   {
     id: 2,
     title: '学习计划',
     preview: '今天的学习目标是...',
-    date: '2025-01-21'
+    date: '2025-01-21',
+    categoryId: 2
   },
   {
     id: 3,
     title: '项目想法',
     preview: '关于新项目的一些构思...',
-    date: '2025-01-22'
+    date: '2025-01-22',
+    categoryId: 3
+  },
+  // 第二页
+  {
+    id: 4,
+    title: '每日总结',
+    preview: '今天完成了以下任务...',
+    date: '2025-01-23',
+    categoryId: 1
+  },
+  {
+    id: 5,
+    title: '读书笔记',
+    preview: '《设计模式》读书笔记...',
+    date: '2025-01-24',
+    categoryId: 2
+  },
+  {
+    id: 6,
+    title: '周末计划',
+    preview: '这个周末准备...',
+    date: '2025-01-25',
+    categoryId: 3
+  },
+  // 第三页
+  {
+    id: 7,
+    title: '会议记录',
+    preview: '今天的会议讨论了...',
+    date: '2025-01-26',
+    categoryId: 1
+  },
+  {
+    id: 8,
+    title: '技术研究',
+    preview: '研究了新的前端框架...',
+    date: '2025-01-27',
+    categoryId: 2
+  },
+  {
+    id: 9,
+    title: '生活感悟',
+    preview: '最近的一些思考...',
+    date: '2025-01-28',
+    categoryId: 3
+  },
+  // 第四页
+  {
+    id: 10,
+    title: '工作安排',
+    preview: '下周的工作计划...',
+    date: '2025-01-29',
+    categoryId: 1
+  },
+  {
+    id: 11,
+    title: '算法笔记',
+    preview: '动态规划的学习笔记...',
+    date: '2025-01-30',
+    categoryId: 2
+  },
+  {
+    id: 12,
+    title: '旅行计划',
+    preview: '计划去的地方有...',
+    date: '2025-01-31',
+    categoryId: 3
   }
 ])
 
@@ -161,7 +260,8 @@ const draggedNoteId = ref<number | null>(null)
 const isOverTrash = ref(false)
 
 const selectCategory = (categoryId: number) => {
-  currentCategory.value = currentCategory.value === categoryId ? null : categoryId
+  currentCategory.value = categoryId
+  currentPage.value = 1
 }
 
 const addCategory = () => {
@@ -177,10 +277,15 @@ const addCategory = () => {
 }
 
 const getNoteCountByCategory = (categoryId: number) => {
+  if (categoryId === 0) return notes.value.length
+  if (categoryId === -1) return notes.value.filter(note => !note.categoryId).length
   return notes.value.filter(note => note.categoryId === categoryId).length
 }
 
 const searchQuery = ref('')
+
+const currentPage = ref(1)
+const pageSize = 5
 
 const filteredNotes = computed(() => {
   let filtered = notes.value
@@ -205,6 +310,19 @@ const filteredNotes = computed(() => {
   
   return filtered
 })
+
+const totalPages = computed(() => Math.ceil(filteredNotes.value.length / pageSize))
+
+const paginatedNotes = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  return filteredNotes.value.slice(start, start + pageSize)
+})
+
+const changePage = (page: number) => {
+  currentPage.value = page
+}
+
+
 
 const onDragStart = (e: any) => {
   isDragging.value = true
@@ -505,14 +623,61 @@ const deleteNote = (id: number) => {
   margin: 2rem 0;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 2rem 0;
+}
+
+.page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.page-btn.active {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    flex-wrap: wrap;
+  }
+}
+
 .notes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
   padding: 0 1rem;
   margin: 0 auto;
   max-width: 1400px;
   width: 100%;
+  grid-template-rows: auto;
 }
 
 .notes-list {
@@ -561,11 +726,17 @@ const deleteNote = (id: number) => {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: grab;
   color: var(--text-color);
-  user-select: none;
+  user-select: text;
   border: 1px solid var(--border-color);
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
+}
+
+.note-card::selection,
+.note-card *::selection {
+  background: rgba(var(--accent-color-rgb), 0.2);
+  color: var(--text-color);
 }
 
 .note-card::before {
@@ -579,16 +750,6 @@ const deleteNote = (id: number) => {
   transform: scaleX(0);
   transition: transform 0.3s ease;
   transform-origin: left;
-}
-
-.note-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 30px var(--card-shadow);
-  border-color: var(--accent-color);
-}
-
-.note-card:hover::before {
-  transform: scaleX(1);
 }
 
 .hidden {
@@ -653,8 +814,13 @@ const deleteNote = (id: number) => {
 .note-card:nth-child(3n + 3) { animation-delay: 0.3s; }
 
 .note-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px var(--card-shadow);
+  border-color: var(--accent-color);
+}
+
+.note-card:hover::before {
+  transform: scaleX(1);
 }
 
 .note-card:active {
@@ -890,42 +1056,104 @@ const deleteNote = (id: number) => {
 }
 
 .add-note-card {
-  display: block;
   background: var(--card-bg);
   border-radius: 12px;
-  border: 2px dashed var(--accent-color);
-  text-decoration: none;
+  box-shadow: 0 4px 20px var(--card-shadow);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  height: 200px;
+  color: var(--text-color);
+  user-select: none;
+  border: 1px solid var(--border-color);
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
-  animation: cardEnter 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+  height: 100%;
+  min-height: 280px;
 }
 
 .add-note-content {
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--accent-color);
+  padding: 2rem;
+  height: 100%;
   gap: 1rem;
 }
 
 .plus-icon {
-  font-size: 3.5rem;
-  font-weight: 200;
-  line-height: 1;
-  transition: transform 0.3s ease;
-  height: 60px;
-  width: 60px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed var(--accent-color);
+  background: var(--btn-bg);
   border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.plus-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.add-note-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.add-note-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px var(--card-shadow);
+  border-color: var(--accent-color);
+}
+
+.add-note-card:hover .plus-icon {
+  background: var(--accent-color);
+  transform: scale(1.1);
+}
+
+.add-note-card:hover .plus-icon svg {
+  color: white;
+}
+
+.add-note-card:hover .add-note-text {
+  color: var(--accent-color);
+}
+
+.plus-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: var(--accent-color);
+  transition: transform 0.3s ease;
+}
+
+.add-note-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+
+.add-note-card:hover .add-note-text {
+  color: var(--accent-color);
+}
+
+.add-note-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px var(--card-shadow);
+  border-color: var(--accent-color);
+}
+
+.add-note-card:hover .plus-icon {
+  transform: scale(1.2);
+  transition: transform 0.3s ease;
 }
 
 .add-note-card:hover .plus-icon {
